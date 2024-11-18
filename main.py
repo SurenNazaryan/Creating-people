@@ -3,10 +3,12 @@ from faker import Faker
 from random import *
 import os
 
-fake = Faker("ru_RU")
-skills = ['Стремительный прыжок', 'Электрический выстрел', 'Ледяной удар', 'Стремительный удар', 'Кислотный взгляд', 'Тайный побег', 'Ледяной выстрел', 'Огненный заряд']
+
+skills = ['Стремительный прыжок', 'Электрический выстрел', 'Ледяной удар',
+          'Стремительный удар', 'Кислотный взгляд', 'Тайный побег',
+          'Ледяной выстрел', 'Огненный заряд']
 letters_mapping = {
-	'а': 'а͠', 'б': 'б̋', 'в': 'в͒͠',
+    'а': 'а͠', 'б': 'б̋', 'в': 'в͒͠',
     'г': 'г͒͠', 'д': 'д̋', 'е': 'е͠',
     'ё': 'ё͒͠', 'ж': 'ж͒', 'з': 'з̋̋͠',
     'и': 'и', 'й': 'й͒͠', 'к': 'к̋̋',
@@ -31,34 +33,41 @@ letters_mapping = {
     ' ': ' '
 }
 
-skills = sample(skills, 3)
-skill_1 = skills[0]
-skill_2 = skills[1]
-skill_3 = skills[2]
-
-result = 'cards/result.svg'
-cards = os.path.dirname(result)
-os.makedirs(cards, exist_ok=True)
 
 def get_runic_skill(skill):
-	for char in skill:
-		skill = skill.replace(char, letters_mapping[char])
-	return skill
+    for char in skill:
+        skill = skill.replace(char, letters_mapping[char])
+    return skill
 
-for i in range(1, 11):
-	context = {
-		"first_name": fake.first_name(),
-  		"last_name": fake.last_name(),
-  		"job": fake.job(),
-  		"town": fake.city(),
- 		"strength": randint(3, 18),
- 		"agility": randint(3, 18),
-  		"endurance": randint(3, 18),
-  		"intelligence": randint(3, 18),
-  		"luck": randint(3, 18),
-  		"skill_1": get_runic_skill(skill_1),
-  		"skill_2": get_runic_skill(skill_2),
-  		"skill_3": get_runic_skill(skill_3)
-  	}
-	result = f'cards/result{i}.svg'
-	file_operations.render_template("charsheet.svg", result, context)
+
+def main():
+    fake = Faker("ru_RU")
+    result = 'cards/result.svg'
+    cards = os.path.dirname(result)
+    os.makedirs(cards, exist_ok=True)
+    for i in range(1, 11):
+        new_skills = sample(skills, 3)
+        skill_1 = new_skills[0]
+        skill_2 = new_skills[1]
+        skill_3 = new_skills[2]
+        context = {
+            "first_name": fake.first_name(),
+            "last_name": fake.last_name(),
+            "job": fake.job(),
+            "town": fake.city(),
+            "strength": randint(3, 18),
+            "agility": randint(3, 18),
+            "endurance": randint(3, 18),
+            "intelligence": randint(3, 18),
+            "luck": randint(3, 18),
+            "skill_1": get_runic_skill(skill_1),
+            "skill_2": get_runic_skill(skill_2),
+            "skill_3": get_runic_skill(skill_3)
+        }
+        result = f'cards/result{i}.svg'
+        file_operations.render_template("charsheet.svg", result, context)
+
+
+if __name__ == "__main__":
+    main()
+    
